@@ -17,6 +17,8 @@ int i, j;
 char outfile[1000000];
 /*End of frequency table - sequence pointers start immediately after*/
 const char MusicFind[10] = { 0xE5, 0x07, 0xE7, 0x07, 0xE8, 0x07, 0xE9, 0x07, 0xEB, 0x07};
+
+/*Alternate table end + initial pointer for Triple Play 2001*/
 const char MusicFindTP[10] = { 0xD9, 0x07, 0xDB, 0x07, 0xDD, 0x07, 0xDF, 0x07, 0x39, 0x50 };
 long seqPtrs[4];
 long nextPtr;
@@ -464,11 +466,6 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 						repeat = 1;
 					}
 
-					if (repeat == 2)
-					{
-						repeat = 1;
-					}
-
 					/*Workaround for Olympic Summer Games*/
 					if (repeat == 20 && ptrs[0] == 0x6EBE && ptrs[1] == 0x6ECD && ptrs[2] == 0x43B4 && ptrs[3] == 0x6EEB)
 					{
@@ -506,6 +503,7 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 						}
 						else
 						{
+							/*Re-map percussion to general MIDI*/
 							if (curTrack == 3)
 							{
 								if (command[0] == 1)
@@ -527,6 +525,34 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 								else if (command[0] == 5)
 								{
 									curNote = 49;
+								}
+								else if (command[0] == 6)
+								{
+									curNote = 40;
+								}
+								else if (command[0] == 7)
+								{
+									curNote = 41;
+								}
+								else if (command[0] == 8)
+								{
+									curNote = 43;
+								}
+								else if (command[0] == 9)
+								{
+									curNote = 45;
+								}
+								else if (command[0] == 10)
+								{
+									curNote = 47;
+								}
+								else if (command[0] == 11)
+								{
+									curNote = 48;
+								}
+								else if (command[0] == 12)
+								{
+									curNote = 50;
 								}
 							
 							}
