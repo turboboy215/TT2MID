@@ -556,6 +556,15 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 								}
 							
 							}
+
+							/*Workaround for key change effect in A Bug's Life bonus music*/
+							if (ptrs[0] == 0x5C71 && ptrs[1] == 0x5CB4 && ptrs[2] == 0x5CF7 && ptrs[3] == 0x5D3A)
+							{
+								if (macTranspose >= -6 && curTrack != 3)
+								{
+									curNote += macTranspose + 6;
+								}
+							}
 							tempPos = WriteNoteEvent(midData, midPos, curNote, curNoteLen, curDelay, firstNote, curTrack);
 							firstNote = 0;
 							midPos = tempPos;
