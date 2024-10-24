@@ -16,7 +16,7 @@ long tableOffset;
 int i, j;
 char outfile[1000000];
 /*End of frequency table - sequence pointers start immediately after*/
-const char MusicFind[10] = { 0xE5, 0x07, 0xE7, 0x07, 0xE8, 0x07, 0xE9, 0x07, 0xEB, 0x07};
+const char MusicFind[10] = { 0xE5, 0x07, 0xE7, 0x07, 0xE8, 0x07, 0xE9, 0x07, 0xEB, 0x07 };
 
 /*Alternate table end + initial pointer for Triple Play 2001*/
 const char MusicFindTP[10] = { 0xD9, 0x07, 0xDB, 0x07, 0xDD, 0x07, 0xDF, 0x07, 0x39, 0x50 };
@@ -215,7 +215,7 @@ int main(int args, char* argv[])
 				printf("Song %i channel 4: 0x%04x\n", songNum, seqPtrs[3]);
 				endPtr = nextPtr - bankAmt;
 				song2mid(songNum, seqPtrs, nextPtr);
-				
+
 				i += 8;
 				songNum++;
 			}
@@ -283,7 +283,7 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 
 	int firstNote = 1;
 	int repeat = 0;
-	
+
 	unsigned long repeatBase = 0;
 
 	midPos = 0;
@@ -402,17 +402,17 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 				command[3] = romData[romPos + 3];
 				switch (command[0])
 				{
-				/*End of macro*/
+					/*End of macro*/
 				case 0xF8:
 					if (macCount > 1)
 					{
-						romPos = macroBase-bankAmt;
+						romPos = macroBase - bankAmt;
 						macCount--;
 					}
 					else
 					{
 						/*Workaround for Men in Black*/
-						if (romPos+bankAmt == 0x5A1D && ptrs[0] == 0x59FA && ptrs[1] == 0x5A0C && ptrs[2] == 0x5A1E && ptrs[3] == 0x5A2F)
+						if (romPos + bankAmt == 0x5A1D && ptrs[0] == 0x59FA && ptrs[1] == 0x5A0C && ptrs[2] == 0x5A1E && ptrs[3] == 0x5A2F)
 						{
 							trackEnd = 1;
 						}
@@ -427,7 +427,7 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 						romPos = macReturn;
 					}
 					break;
-				/*Call macro*/
+					/*Call macro*/
 				case 0xF9:
 					macCount = command[1];
 					macTranspose = (signed char)command[2];
@@ -437,10 +437,10 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 						trackEnd = 1;
 					}
 					macReturn = romPos + 5;
-					romPos = macroBase-bankAmt;
+					romPos = macroBase - bankAmt;
 					break;
 
-				/*Loop point*/
+					/*Loop point*/
 				case 0xFC:
 					/*Fix for Hercules empty channel 4 (fanfare)*/
 					if (command[1] == 0xFF && command[2] == 0xF9)
@@ -452,7 +452,7 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 					romPos = repeatBase;
 					break;
 
-				/*End of loop*/
+					/*End of loop*/
 				case 0xFD:
 					/*Workaround for A Bug's Life*/
 					if (repeat == 8 && ptrs[0] == 0x4F0D && ptrs[1] == 0x4DA9 && ptrs[2] == 0x4E89 && ptrs[3] == 0x4F30)
@@ -482,12 +482,12 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 					}
 					break;
 
-				/*Stop song (for non-looping tunes)*/
+					/*Stop song (for non-looping tunes)*/
 				case 0xFE:
 					trackEnd = 1;
 					break;
 
-				/*Restart song*/
+					/*Restart song*/
 				case 0xFF:
 					trackEnd = 1;
 					break;
@@ -496,7 +496,7 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 					if (command[0] < 128)
 					{
 						curNote = command[0];
-						curNoteLen = command[1]*5;
+						curNoteLen = command[1] * 5;
 						if (curNote == 0)
 						{
 							curDelay += curNoteLen;
@@ -554,7 +554,7 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 								{
 									curNote = 50;
 								}
-							
+
 							}
 
 							/*Workaround for key change effect in A Bug's Life bonus music*/
@@ -563,6 +563,14 @@ void song2mid(int songNum, long ptrs[], long nextPtr)
 								if (macTranspose >= -6 && curTrack != 3)
 								{
 									curNote += macTranspose + 6;
+								}
+							}
+							/*Workaround for key change effect in Mulan story music*/
+							if (ptrs[0] == 0x5FB6 && ptrs[1] == 0x6019 && ptrs[2] == 0x6067 && ptrs[3] == 0x6082)
+							{
+								if (macTranspose == -2 && curTrack != 3)
+								{
+									curNote += 5;
 								}
 							}
 							tempPos = WriteNoteEvent(midData, midPos, curNote, curNoteLen, curDelay, firstNote, curTrack);
