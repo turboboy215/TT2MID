@@ -3,7 +3,7 @@ Tiertex (GB/GBC) to MIDI converter
 
 This tool converts music from Game Boy and Game Boy Color games using Tiertex's sound engine to MIDI format.
 
-It works with ROM images. To use it, you must specify the name of the ROM followed by the number of the bank containing the sound data (in hex).
+It works with ROM images. To use it, you must specify the name of the ROM followed by the number of the bank containing the sound data (in hex). To use the "old mode" which fixes World Cup USA '94, additionally use the flag "O" after the bank number.
 
 Examples:
 * TT2MID "Toy Story (E) [!].gb" 20
@@ -32,6 +32,7 @@ This tool was created by referencing the publicly released audio source code for
 * Toy Story 2
 * Triple Play 2001
 * World Cup '98
+* World Cup USA '94
 
 ## To do:
   * Support for other versions of the sound engine (SNES, MegaDrive)
